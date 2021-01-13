@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from random import choice
+from string import ascii_lowercase, digits
 
 app = Flask(__name__)
 CORS(app)
@@ -51,6 +53,18 @@ def get_user(id):
         return ({})
     return users
 
+def generate_id():
+    ascii_len = 3  # number of lowercase letters to generate
+    digits_len = 3  # number of digits to generate (after letters)
+    new_id = ""  # put any leading string here
+    for i in range(ascii_len):
+        new_id += choice(ascii_lowercase)
+    for i in range(digits_len):
+        new_id += choice(digits)
+    print(new_id)
+    return new_id
+
+
 @app.route('/users', methods=['GET', 'POST', 'DELETE'])
 def get_users():
     if request.method == 'GET':
@@ -80,13 +94,14 @@ def get_users():
             if (points == points_max):
                 subdict['users_list'].append(user)
         return subdict
-    
+
     elif request.method == 'POST':
         userToAdd = request.get_json()
+        userToAdd['id'] = generate_id()
         users['users_list'].append(userToAdd)
-        resp = jsonify(success = True)
-        #resp.status_code = 200 #optionally, you can always set a response code. 
-        # 200 is the default code for a normal response
+        resp = jsonify(success = True, new_user = userToAdd)
+        resp.status_code = 201
+        # 200 is the default code for a normal response, 201 for content created
         return resp
     
     elif request.method == 'DELETE':

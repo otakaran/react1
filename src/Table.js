@@ -16,13 +16,15 @@ const TableBody = props => {
             <td>{row.name}</td>
             <td>{row.job}</td>
             <td>
-              <button onClick={() => props.removeCharacter(index)}>Delete</button>
+              <button onClick={(delete_user) => props.removeCharacter(index)}>Delete</button>
+
             </td>
           </tr>
         )
     })
     return <tbody>{rows}</tbody>
 }
+
 
 const Table = props => {
     const { characterData, removeCharacter } = props

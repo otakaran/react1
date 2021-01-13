@@ -16,10 +16,11 @@ class App extends Component {
       }
 
       makePostCall(character){
-        return axios.post('http://localhost:5000/users', character)
+        // Had to use local ip here otherwise only get was supported
+        return axios.post('http://127.0.0.1:5000/users', character)
          .then(function (response) {
            console.log(response);
-           return (response.status === 200);
+           return (response);
          })
          .catch(function (error) {
            console.log(error);
@@ -29,8 +30,8 @@ class App extends Component {
 
       handleSubmit = character => {
         this.makePostCall(character).then( callResult => {
-           if (callResult === true) {
-              this.setState({ characters: [...this.state.characters, character] });
+           if (callResult.status === 201) {
+              this.setState({ characters: [...this.state.characters, callResult.data["new_user"]] });
            }
         });
       }
