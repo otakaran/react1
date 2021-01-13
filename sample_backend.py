@@ -1,5 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
+
+#export FLASK_APP=sample_backend.py
+#export FLASK_ENV=development
 
 users = { 
     'users_list' :
