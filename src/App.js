@@ -6,14 +6,38 @@ import Form from './Form';
 
 class App extends Component {
     state = { characters: [] }
+    makeDeleteCall(character){
+      // Had to use local ip here otherwise only get was supported
+      return axios.delete('http://127.0.0.1:5000/users', {data:character["id"]})
+       .then(function (response) {
+         console.log(response);
+         return (response);
+       })
+       .catch(function (error) {
+         console.log(error);
+         return false;
+       });
+    }
+
       removeCharacter = index => {
         const { characters } = this.state
-        this.setState({
-          characters: characters.filter((character, i) => { 
-              return i !== index
+        console.log(characters[index])
+        this.makeDeleteCall(characters[index]).then(callResult => {
+          if (callResult.status === 200) {
+            // Remove on frontend
+            this.setState({
+              characters: characters.filter((character, i) => { 
+                return i !== index
+            })
           })
-        })
+        }
+        });
+
+        
+        
       }
+
+
 
       makePostCall(character){
         // Had to use local ip here otherwise only get was supported

@@ -108,7 +108,6 @@ def get_users():
         userToRm = request.get_data().decode("utf-8")
         subdict = {'users_list' : []}
         found = False
-        print(userToRm)
         if userToRm:
             for user in reversed(users['users_list']):
                 if (user['name'] == userToRm) | (user['id'] == userToRm):
@@ -120,5 +119,7 @@ def get_users():
                         resp = jsonify(success = False)
                         resp.status_code = 404
                         return resp
+        if not found:
+            resp.status_code = 404
         resp = jsonify(success = found, deleted_users = subdict['users_list'])
         return resp
